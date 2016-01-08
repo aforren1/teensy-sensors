@@ -1,5 +1,13 @@
 ## Teensy tiny sensors
 
+Get this locally with:
+
+    git clone https://github.com/aforren1/teensy-sensors
+
+And update with:
+
+    git pull
+
 Worked examples of sensor fusion (for the MPU-9250):
 
 https://github.com/kriswiner/MPU-9250
