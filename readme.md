@@ -24,5 +24,5 @@ The photosensor and piezo amount to calling `analogRead()` in a loop. The more c
 Other things:
 
  - Logging, streaming, and saving data
- - Displaying data for diagnostics (downsampling ok) ([plotly](https://plot.ly/arduino/dht22-temperature-tutorial/) would be cool)
+ - Displaying data for diagnostics (downsampling ok) ([plotly](https://plot.ly/arduino/tmp36-temperature-tutorial/) would be cool)
  - Serial communication with C++ programs in a timely fashion
