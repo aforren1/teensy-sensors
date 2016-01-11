@@ -23,7 +23,7 @@ There's even a tutorial linked.
 https://www.arduino.cc/en/Tutorial/Knock
 
 
-The photosensor and piezo amount to calling `analogRead()` in a loop, though it might not be *quite* that easy -- see [this post](https://sites.google.com/site/measuringstuff/the-arduino#TOC-Sample-Rates) and [this repo](https://github.com/pedvide/ADC ) for some thoughts. The more complicated accelerometer stuff might take a bit more effort.
+The photosensor and piezo amount to calling `analogRead()` in a loop, though it might not be *quite* that easy -- see ~~[this post](https://sites.google.com/site/measuringstuff/the-arduino#TOC-Sample-Rates)~~ and [this repo](https://github.com/pedvide/ADC ) for some thoughts. The more complicated accelerometer stuff might take a bit more effort.
 
 The complete schematic can be found here: http://www.schematics.com/project/teensy-sensors-25692/
 
