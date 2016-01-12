@@ -4,7 +4,14 @@
 // analogReadIntervalTimer/analogReadIntervalTimer.ino
 // for comments
 
-#include
+// and
+// https://bitbucket.org/cinqlair/mpu9250/src/
+// 0b38d94e630291eeff31fb0c1897425f64cb0c31/arduino/
+// mpuarduino.ino?at=master&fileviewer=file-view-default
+// for I2C stuff (which is different from the tutorial in subtle ways)
+
+#include <Wire.h>
+#include <TimerOne.h>
 
 #define    MPU9250_ADDRESS            0x68
 #define    MAG_ADDRESS                0x0C
