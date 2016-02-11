@@ -21,10 +21,11 @@ num_frames = round(num_secs / scrn.ifi);
 waitframes = 1;
 timeout = zeros(1, num_frames);
 second_cnt = 1;
+
 Priority(topPriorityLevel);
 vbl = Screen('Flip', scrn.window);
 for frame = 1:num_frames
-    second_cnt = round((frame/num_frames)*num_secs);
+    second_cnt = floor((frame/num_frames)*num_secs);
     % if odd time (seconds)
     if rem(second_cnt, 2) == 1
         Screen('FillRect', scrn.window, scrn.black);
