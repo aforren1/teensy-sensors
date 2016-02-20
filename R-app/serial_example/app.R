@@ -51,7 +51,7 @@ ui <- shinyUI(fluidPage(
   )
 ))
 
-server <- shinyServer(function(input, output){
+server <- shinyServer(function(input, output, session){
   
   fetchData <- reactive({
     invalidateLater(1, NULL)
@@ -86,10 +86,13 @@ server <- shinyServer(function(input, output){
       write.csv(dat, file)
     }
   )
-  # cancel.onSessionEnded <- session$onSessionEnded(function() {
-  #   close(ser_conn)
-  #   disp('Closed serial connection')
-  # })
+  cancel.onSessionEnded <- session$onSessionEnded(function() {
+    if(live) {
+        close(ser_conn)
+        message('Closed serial connection')
+    }
+    message('Session ended')
+  })
 })
 
 # Run the application 
