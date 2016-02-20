@@ -54,7 +54,7 @@ ui <- shinyUI(fluidPage(
         max = 200,
         value = 80
       ),
-      sliderInput("yaxis", "Y-axis limits:",-10, 10, c(-3, 3)),
+      sliderInput("yaxis", "Y-axis limits:",-10, 10, c(-5, 5)),
       downloadButton('downloadData', 'Download')
     ),
     
@@ -66,7 +66,7 @@ ui <- shinyUI(fluidPage(
 
 server <- shinyServer(function(input, output, session) {
   fetchData <- reactive({
-    invalidateLater(1, NULL)
+    invalidateLater(1, session)
     if (live) {
       # getting data from the serial port
       dat <<- rbind(dat,
@@ -79,7 +79,7 @@ server <- shinyServer(function(input, output, session) {
         rbind(dat,
               data.frame(
                 V1 = 0.002 * counter,
-                V2 = ifelse(counter %% 13 == 0, 2,-2),
+                V2 = ifelse(counter %% 23 == 0, 2,-2),
                 V3 = ifelse(counter %% 7 == 0,-1, 1),
                 V4 = rnorm(1), 
                 V5 = runif(1, min = -5, max = 5)
