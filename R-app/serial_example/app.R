@@ -6,7 +6,7 @@ library(dplyr) # filtering data
 library(ggvis) # plotting
 
 ser_conn <- serialConnection(name = "ardy", port = "ttyACM0",
-                             mode = "9600,n,8,1") # make baud rate, etc. matches your arduino code
+                             mode = "9600,n,8,1") # make sure the baud rate, etc. matches arduino code
 open(ser_conn) # returns success, regardless of actual outcome
 
 # hacky way to try/catch; for whatever reason, I can't catch errors in external C code
