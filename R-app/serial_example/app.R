@@ -19,18 +19,19 @@ if (nchar(geterrmessage() > 1)) {
 
 if (live) {
   Sys.sleep(.1)
-  d <-
-    read.serialConnection(ser_conn) # exclude the header of the data -- difficult to plot text!
+  # exclude the header of the data -- difficult to plot text!
+  invisible(read.serialConnection(ser_conn)) 
   Sys.sleep(.1)
-  dat <-
-    read.delim(textConnection(read.serialConnection(ser_conn)), header = FALSE)[1:3]
+  # read first bit as a starting point
+  dat <- read.delim(textConnection(read.serialConnection(ser_conn)), header = FALSE)[1:3]
 } else {
   set.seed(1)
   dat <- data.frame(
     V1 = 0,
     V2 = 0,
     V3 = 0,
-    V4 = rnorm(1)
+    V4 = rnorm(1),
+    V5 = runif(1, min = -5, max = 5)
   )
   counter <- 0
 }
@@ -78,9 +79,10 @@ server <- shinyServer(function(input, output, session) {
         rbind(dat,
               data.frame(
                 V1 = 0.002 * counter,
-                V2 = ifelse(counter %% 5 == 0, 2,-2),
+                V2 = ifelse(counter %% 13 == 0, 2,-2),
                 V3 = ifelse(counter %% 7 == 0,-1, 1),
-                V4 = rnorm(1)
+                V4 = rnorm(1), 
+                V5 = runif(1, min = -5, max = 5)
               ))
     }
     gather(dat, group, value,-V1) # from tidyr
