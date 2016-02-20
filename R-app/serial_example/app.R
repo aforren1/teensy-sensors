@@ -1,13 +1,13 @@
-library(shiny)
-library(shinythemes)
+library(shiny) # web app framework (runs in browser)
+library(shinythemes) # (optional)
 library(serial)
-library(tidyr)
-library(dplyr)
-library(ggvis)
+library(tidyr) # reshaping data
+library(dplyr) # filtering data
+library(ggvis) # plotting
 
 ser_conn <- serialConnection(name = "ardy", port = "ttyACM0",
-                             mode = "9600,n,8,1") # make sure this matches your arduino code
-open(ser_conn)
+                             mode = "9600,n,8,1") # make baud rate, etc. matches your arduino code
+open(ser_conn) # returns success, regardless of actual outcome
 
 # hacky way to try/catch; for whatever reason, I can't catch errors in external C code
 if(nchar(geterrmessage() > 1)) {
@@ -24,7 +24,7 @@ if(live) {
   dat <- read.delim(textConnection(read.serialConnection(ser_conn)), header = FALSE)[1:3]
 } else {
   set.seed(1)
-  dat <- data.frame(V1 = 0, X2 = 0, X3 = 0, X4 = rnorm(1))
+  dat <- data.frame(V1 = 0, V2 = 0, V3 = 0, V4 = rnorm(1))
   counter <- 0
 }
 
@@ -61,8 +61,8 @@ server <- shinyServer(function(input, output){
                                header = FALSE)[1:3])
     } else { # generating more fake data
       counter <<- counter + 1
-      dat <<- rbind(dat, data.frame(V1 = 0.002 * counter, X2 = ifelse(counter %% 5 == 0, 2, -2),
-                                    X3 = ifelse(counter %% 7 == 0, -1, 1), X4 = rnorm(1)))
+      dat <<- rbind(dat, data.frame(V1 = 0.002 * counter, V2 = ifelse(counter %% 5 == 0, 2, -2),
+                                    V3 = ifelse(counter %% 7 == 0, -1, 1), V4 = rnorm(1)))
     }
     gather(dat, group, value, -V1) # from tidyr
   })
