@@ -4,13 +4,28 @@ library(serial)
 library(tidyr) # reshaping data
 library(dplyr) # filtering data
 library(ggvis) # plotting
+library(tcltk)
+
+open2 <- function (con, ...) 
+{
+  os_path <- switch(.Platform$OS.type, windows = "//./", unix = "/dev/")
+  .Tcl(paste("set sdev_", con$port, " [open ", os_path, 
+                 con$port, " r+]", sep = ""))
+  eof <- paste(" -eofchar ", con$eof, sep = "")
+  if (con$eof == "") 
+    eof = ""
+  .Tcl(paste("fconfigure $sdev_", con$port, " -mode ", 
+                 con$mode, " -buffering ", con$buffering, " -blocking 0", 
+                 eof, " -translation ", con$translation, " -handshake ", 
+                 con$handshake, sep = ""))
+  TRUE
+}
 
 ser_conn <- serialConnection(name = "ardy", port = "ttyACM0",
                              mode = "9600,n,8,1") # make sure the baud rate, etc. matches arduino code
-open(ser_conn) # returns success, regardless of actual outcome
+res <- try(open2(ser_conn), TRUE) # returns success, regardless of actual outcome
 
-# hacky way to try/catch; for whatever reason, I can't catch errors in external C code
-if (nchar(geterrmessage() > 1)) {
+if (class(res) == 'try-error') {
   live <- 0
   message('No device, going into simulation...')
 } else {
@@ -18,10 +33,10 @@ if (nchar(geterrmessage() > 1)) {
 }
 
 if (live) {
-  Sys.sleep(.1)
+  Sys.sleep(.3)
   # exclude the header of the data -- difficult to plot text!
   invisible(read.serialConnection(ser_conn)) 
-  Sys.sleep(.1)
+  Sys.sleep(.3)
   # read first bit as a starting point
   dat <- read.delim(textConnection(read.serialConnection(ser_conn)), header = FALSE)[1:3]
 } else {
@@ -39,7 +54,7 @@ if (live) {
 ui <- shinyUI(fluidPage(
   theme = shinytheme("readable"),
   # theme is entirely optional
-  titlePanel("Serial Port Mk 4"),
+  titlePanel("Serial Port Mk 5"),
   
   # Sidebar with a slider input for number of bins
   sidebarLayout(
