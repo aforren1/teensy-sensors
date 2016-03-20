@@ -58,8 +58,8 @@ void setup() {
     delay(1000);
 
     // TODO: Use external reference?
-    adc->setReference(ADC_REF_3V3, ADC_1); // change all 3.3 to 1.2 if you change the reference to 1V2
-
+    adc->setReference(ADC_REF_3V3, ADC_0); // change all 3.3 to 1.2 if you change the reference to 1V2
+   
     adc->setAveraging(16); // set number of averages
     adc->setResolution(12); // set bits of resolution
 
@@ -75,7 +75,7 @@ void setup() {
     // start the timers, if it's not possible, startTimerValuex will be false
     startTimerValue0 = timer0.begin(timer0_callback, period0);
     delayMicroseconds(25); // if we wait less than 36us the timer1 will interrupt the conversion
-    
+
     startTimerValue1 = timer1.begin(timer1_callback, period1);
     adc->enableInterrupts(ADC_0);
 
@@ -196,4 +196,3 @@ void adc0_isr() {
     //digitalWriteFast(ledPin+2, !digitalReadFast(ledPin+2));
 
 }
-

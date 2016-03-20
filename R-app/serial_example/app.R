@@ -1,29 +1,14 @@
 library(shiny) # web app framework (runs in browser)
-library(shinythemes) # (optional)
-library(serial)
+#library(shinythemes) # (optional)
+library(serial) # with my github version (https://github.com/aforren1/serial)
 library(tidyr) # reshaping data
 library(dplyr) # filtering data
 library(ggvis) # plotting
 library(tcltk)
 
-open2 <- function (con, ...) 
-{
-  os_path <- switch(.Platform$OS.type, windows = "//./", unix = "/dev/")
-  .Tcl(paste("set sdev_", con$port, " [open ", os_path, 
-                 con$port, " r+]", sep = ""))
-  eof <- paste(" -eofchar ", con$eof, sep = "")
-  if (con$eof == "") 
-    eof = ""
-  .Tcl(paste("fconfigure $sdev_", con$port, " -mode ", 
-                 con$mode, " -buffering ", con$buffering, " -blocking 0", 
-                 eof, " -translation ", con$translation, " -handshake ", 
-                 con$handshake, sep = ""))
-  TRUE
-}
-
-ser_conn <- serialConnection(name = "ardy", port = "ttyACM0",
+ser_conn <- serialConnection(port = "ttyACM0",
                              mode = "9600,n,8,1") # make sure the baud rate, etc. matches arduino code
-res <- try(open2(ser_conn), TRUE) # returns success, regardless of actual outcome
+res <- try(open2(ser_conn), TRUE) 
 
 if (class(res) == 'try-error') {
   live <- 0
@@ -52,9 +37,9 @@ if (live) {
 }
 
 ui <- shinyUI(fluidPage(
-  theme = shinytheme("readable"),
+  #theme = shinytheme("readable"),
   # theme is entirely optional
-  titlePanel("Serial Port Mk 5"),
+  titlePanel("Serial Port Mk 6"),
   
   # Sidebar with a slider input for number of bins
   sidebarLayout(
@@ -66,8 +51,8 @@ ui <- shinyUI(fluidPage(
         "nsamples",
         "Samples into the past:",
         min = 10,
-        max = 200,
-        value = 80
+        max = 500,
+        value = 100
       ),
       sliderInput("yaxis", "Y-axis limits:",-10, 10, c(-5, 5)),
       downloadButton('downloadData', 'Download')
@@ -90,14 +75,15 @@ server <- shinyServer(function(input, output, session) {
     } else {
       # generating more fake data
       counter <<- counter + 1
+      V1temp <- 0.002 * (counter*20 + c(2:21))
       dat <<-
         rbind(dat,
               data.frame(
-                V1 = 0.002 * counter,
-                V2 = ifelse(counter %% 23 == 0, 2,-2),
-                V3 = ifelse(counter %% 7 == 0,-1, 1),
-                V4 = rnorm(1), 
-                V5 = runif(1, min = -5, max = 5)
+                V1 = V1temp,
+                V2 = rep(ifelse(counter %% 23 == 0, 2,-2), 20),
+                V3 = rep(ifelse(counter %% 7 == 0,-1, 1),20),
+                V4 = rnorm(20), 
+                V5 = rep(runif(1, min = -5, max = 5),20)
               ))
     }
     gather(dat, group, value,-V1) # from tidyr
@@ -106,7 +92,7 @@ server <- shinyServer(function(input, output, session) {
   fetchData %>%
     group_by(group) %>%
     arrange(V1) %>% # sort by time/sample number
-    filter(row_number() >= n() - input$nsamples) %>% # display the `nsamples` most current samples
+    filter(row_number() >= n() - input$nsamples) %>% # `nsamples` = most current samples
     filter(group %in% input$grps) %>%
     ggvis( ~ V1, ~ value, stroke = ~ group) %>%
     layer_lines() %>%
@@ -116,7 +102,7 @@ server <- shinyServer(function(input, output, session) {
       nice = TRUE,
       clamp = TRUE
     ) %>%
-    set_options(duration = 0.1) %>% # 0 makes the legend jump around, > 1 leads to weird transition effects
+    set_options(duration = 0.001) %>% # 0 makes the legend jump around, > 1 leads to weird transition effects
     bind_shiny("ggvis", "ggvis_ui")
   
   output$downloadData <- downloadHandler(
