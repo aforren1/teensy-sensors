@@ -8,7 +8,7 @@ library(tcltk)
 
 ser_conn <- serialConnection(port = "ttyACM0",
                              mode = "9600,n,8,1") # make sure the baud rate, etc. matches arduino code
-res <- try(open2(ser_conn), TRUE) 
+res <- try(open(ser_conn), TRUE) 
 
 if (class(res) == 'try-error') {
   live <- 0
