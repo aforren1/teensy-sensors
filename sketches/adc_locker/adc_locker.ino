@@ -63,14 +63,16 @@ void loop() {
     }
     
     // do all conversions after the go_flag is set
-    Serial.print(adc->analogRead(analog_0)*3.3/adc->getMaxValue(ADC_0), DEC);
-    Serial.print(adc->analogRead(analog_1)*3.3/adc->getMaxValue(ADC_0), DEC);
-    Serial.print(adc->analogRead(analog_2)*3.3/adc->getMaxValue(ADC_0), DEC);
-    Serial.print(adc->analogRead(analog_3)*3.3/adc->getMaxValue(ADC_0), DEC);
-    Serial.print(adc->analogRead(analog_4)*3.3/adc->getMaxValue(ADC_0), DEC);
+    Serial.print(analogHelper(analog_0), DEC);
+    Serial.print(analogHelper(analog_0), DEC);
+    Serial.print(analogHelper(analog_0), DEC);
+    Serial.print(analogHelper(analog_0), DEC);
+    Serial.print(analogHelper(analog_0), DEC);
     
     digitalWriteFast(led_pin, !digitalReadFast(led_pin));
     go_flag = !go_flag; // reset the flag
 }
 
-
+float analogHelper(int pin_num) {
+    return adc->analogRead(pin_num)*3.3/adc->getMaxValue(ADC_0);
+}
