@@ -31,11 +31,12 @@ ADC *adc = new ADC();
 void setup() {
     
     pinMode(led_pin, OUTPUT);
-    pinMode(analog_0, OUTPUT);
-    pinMode(analog_1, OUTPUT);
-    pinMode(analog_2, OUTPUT);
-    pinMode(analog_3, OUTPUT);
-    pinMode(analog_4, OUTPUT);
+    analogSetup(analog_0);
+    analogSetup(analog_1);
+    analogSetup(analog_2);
+    analogSetup(analog_3);
+    analogSetup(analog_4);
+
     
     Serial.begin(9600);
     delay(1000); // This one is in ms (confusing!)
@@ -44,12 +45,6 @@ void setup() {
     adc->setAveraging(8);
     adc->setResolution(12);
     adc->setConversionSpeed(ADC_HIGH_SPEED);
-    
-    adc->startContinuous(analog_0, ADC_0);
-    adc->startContinuous(analog_1, ADC_0);
-    adc->startContinuous(analog_2, ADC_0);
-    adc->startContinuous(analog_3, ADC_0);
-    adc->startContinuous(analog_4, ADC_0);
   
     start_timer_value = timer0.begin(timer0_callback); //  
     delay(500);
@@ -63,16 +58,21 @@ void loop() {
     }
     
     // do all conversions after the go_flag is set
-    Serial.print(analogHelper(analog_0), DEC);
-    Serial.print(analogHelper(analog_0), DEC);
-    Serial.print(analogHelper(analog_0), DEC);
-    Serial.print(analogHelper(analog_0), DEC);
-    Serial.print(analogHelper(analog_0), DEC);
+    Serial.print(analogReader(analog_0), DEC);
+    Serial.print(analogReader(analog_0), DEC);
+    Serial.print(analogReader(analog_0), DEC);
+    Serial.print(analogReader(analog_0), DEC);
+    Serial.print(analogReader(analog_0), DEC);
     
     digitalWriteFast(led_pin, !digitalReadFast(led_pin));
     go_flag = !go_flag; // reset the flag
 }
 
-float analogHelper(int pin_num) {
+void analogSetup(int pin_num) {
+    pinMode(pin_num, OUTPUT);
+    adc->startContinuous(pin_num, ADC_0);
+}
+
+float analogReader(int pin_num) {
     return adc->analogRead(pin_num)*3.3/adc->getMaxValue(ADC_0);
 }
