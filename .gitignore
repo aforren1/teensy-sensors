@@ -1,1 +1,4 @@
 benchmarking/*.pyc
+*.db
+*/*.db
+sketches/.vscode

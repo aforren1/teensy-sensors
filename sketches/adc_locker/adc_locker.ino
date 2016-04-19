@@ -59,15 +59,18 @@ void loop() {
     
     // do all conversions after the go_flag is set
     Serial.print(analogReader(analog_0), DEC);
-    Serial.print(analogReader(analog_0), DEC);
-    Serial.print(analogReader(analog_0), DEC);
-    Serial.print(analogReader(analog_0), DEC);
-    Serial.print(analogReader(analog_0), DEC);
+    Serial.print(analogReader(analog_1), DEC);
+    Serial.print(analogReader(analog_2), DEC);
+    Serial.print(analogReader(analog_3), DEC);
+    Serial.print(analogReader(analog_4), DEC);
     
-    digitalWriteFast(led_pin, !digitalReadFast(led_pin));
+    digitalWriteFast(led_pin, !digitalReadFast(led_pin));  // optional, blink the LED
     go_flag = !go_flag; // reset the flag
 }
 
+void timer0_callback(void) {
+    go_flag = true;
+}
 void analogSetup(int pin_num) {
     pinMode(pin_num, OUTPUT);
     adc->startContinuous(pin_num, ADC_0);
