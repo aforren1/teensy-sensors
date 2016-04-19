@@ -46,7 +46,7 @@ void setup() {
     adc->setResolution(12);
     adc->setConversionSpeed(ADC_HIGH_SPEED);
   
-    start_timer_value = timer0.begin(timer0_callback); //  
+    start_timer_value = timer0.begin(timer0_callback, period); //  
     delay(500);
 }
 
