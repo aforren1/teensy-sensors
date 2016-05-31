@@ -1,4 +1,5 @@
 
+
 /*
 Now that I somewhat understand interrupts, here's a reworked example that
 reads the two channels at proper intervals.
