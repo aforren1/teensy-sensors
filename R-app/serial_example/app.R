@@ -4,9 +4,8 @@ library(serial) # with my github version (https://github.com/aforren1/serial)
 library(tidyr) # reshaping data
 library(dplyr) # filtering data
 library(ggvis) # plotting
-library(tcltk)
 
-ser_conn <- serialConnection(port = "ttyACM0",
+ser_conn <- serialConnection(name = 'bah',port = "ttyACM0",
                              mode = "9600,n,8,1") # make sure the baud rate, etc. matches arduino code
 res <- try(open(ser_conn), TRUE) 
 

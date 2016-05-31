@@ -4,7 +4,7 @@
 const int analog_0 = A0;
 const int analog_1 = A1;
 
-const int period_0 = 5000;
+const int period_0 = 10000;
 
 IntervalTimer timer_0;
 int value_0;
@@ -41,11 +41,11 @@ void loop() {
   value_0 = adc->analogRead(analog_0);
   value_1 = adc->analogRead(analog_1);
 
-  Serial.print(millis());
+  Serial.print(millis()/1000.0, 3);
   Serial.print("\t");
-  Serial.print(value_0*3.3/adc->getMaxValue(ADC_0), DEC);
+  Serial.print(value_0*3.3/adc->getMaxValue(ADC_0), 4);
   Serial.print("\t");
-  Serial.println(value_1*3.3/adc->getMaxValue(ADC_0), DEC);
+  Serial.println(value_1*3.3/adc->getMaxValue(ADC_0), 4);
   
   while(!go_flag_copy) { 
     noInterrupts();
