@@ -22,7 +22,7 @@ if (live) {
   invisible(read.serialConnection(ser_conn)) 
   Sys.sleep(.3)
   # read first bit as a starting point
-  dat <- read.delim(textConnection(read.serialConnection(ser_conn)), header = FALSE)[1:3]
+  dat <- read.delim(textConnection(read.serialConnection(ser_conn)), header = FALSE)
 } else {
   set.seed(1)
   dat <- data.frame(
@@ -70,7 +70,7 @@ server <- shinyServer(function(input, output, session) {
       # getting data from the serial port
       dat <<- rbind(dat,
                     read.delim(textConnection(read.serialConnection(ser_conn)),
-                               header = FALSE)[1:3])
+                               header = FALSE))
     } else {
       # generating more fake data
       counter <<- counter + 1
