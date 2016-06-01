@@ -1,42 +1,35 @@
 
 % Timing example in Psychtoolbox (MATLAB, Octave)
-
-%Screen('Preference', 'SkipSyncTests', 1);
-Screen('Preference', 'SuppressAllWarnings', 1);
-
-screens = Screen('Screens');
-
-scrn.screen_num = max(screens);
-
-scrn.white = WhiteIndex(scrn.screen_num);
-scrn.black = BlackIndex(scrn.screen_num);
-[scrn.window, scrn.size] = Screen('OpenWindow', scrn.screen_num,...
-                                       scrn.white, [0 0 600 600]); %
-HideCursor();
-scrn.ifi = Screen('GetFlipInterval', scrn.window);
-
-topPriorityLevel = MaxPriority(scrn.window);
-num_secs = 5;
-num_frames = round(num_secs / scrn.ifi);
-waitframes = 1;
-timeout = zeros(1, num_frames);
-second_cnt = 1;
-
-Priority(topPriorityLevel);
-vbl = Screen('Flip', scrn.window);
-for frame = 1:num_frames
-    second_cnt = floor((frame/num_frames)*num_secs);
-    % if odd time (seconds)
-    if rem(second_cnt, 2) == 1
-        Screen('FillRect', scrn.window, scrn.black);
-    else
-        Screen('FillRect', scrn.window, scrn.white);
+function [aud_out, vis_out] = ptb_benchmark
+    try
+        scrn = PsychScreen('big_screen', true);
+        audio = PsychAudio(1);
+        FillAudio(audio, 'beep.wav', 1);
+        FillScreen(scrn, 'black');
+        audio_times = GetSecs + (1:10);
+        visual_times = audio_times - 0.5*scrn.ifi;
+        aud_out = zeros(1,10);
+        vis_out = zeros(1,10);
+        FlipScreen(scrn);
+        Priority(scrn.priority);
+        for nn = 1:10
+            if mod(nn, 2) == 1
+                FillScreen(scrn, 'white');
+            else
+                FillScreen(scrn, 'black');
+            end
+            WaitSecs(0.6);
+            StopAudio(audio, 1);
+            aud_out(nn) = PlayAudio(audio, 1, audio_times(nn));
+            vis_out(nn) = FlipScreen(scrn, visual_times(nn));
+        end
+        WaitSecs(0.6);
+        Priority(0);
+        CloseScreen(scrn);
+        CloseAudio(audio);
+    catch me
+        CloseScreen(scrn);
+        CloseAudio(audio);
+        rethrow(me);
     end
-
-    Screen('DrawingFinished', scrn.window);
-    vbl = Screen('Flip', scrn.window, vbl + (waitframes - 0.5) * scrn.ifi);
-    timeout(frame) = vbl;
 end
-Priority(0);
-ShowCursor();
-sca;
