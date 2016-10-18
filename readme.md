@@ -8,18 +8,14 @@ And update with:
 
     git pull
 
-Worked examples of sensor fusion (for the MPU-9250):
-https://github.com/kriswiner/MPU-9250
-
-And a simpler example using the MPU-9250, minus sensor fusion:
-http://www.lucidarme.me/?p=5057
-
-"Microphone" (Piezo element) tutorial:
-https://www.arduino.cc/en/Tutorial/Knock
-
 The complete schematic can be found here:https://easyeda.com/normal/testproject_schem-02BzxvtPM.png
 
 Other things:
 
- - Hardware things -- how far away can sensors be before noise is an issue?
- - Serial communication with C++ programs in a timely fashion
+  - How far away can sensors be before noise is an issue?
+  - With the advent of the Teensy 3.5 and 3.6, what cool things can we do?
+    - Better distribution across ADCs (TODO: figure out new ADC_0/ADC_1 mapping)
+    - Generally faster conversion
+    - Communication over the 340Mb USB
+    - [Audio stimulation](https://github.com/PaulStoffregen/Audio) (though latency is USB/serial latency + audio latency itself, which might still be <5ms)
+    - Digital acquisition (knobs, fMRI triggers, ...)
