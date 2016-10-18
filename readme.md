@@ -19,3 +19,4 @@ Other things:
     - Communication over the 340Mb USB
     - [Audio stimulation](https://github.com/PaulStoffregen/Audio) (though latency is USB/serial latency + audio latency itself, which might still be <5ms)
     - Digital acquisition (knobs, fMRI triggers, ...)
+        - Use interrupts for more consistent acquisition? Need to fiddle with priorities then
