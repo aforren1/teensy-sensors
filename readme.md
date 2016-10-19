@@ -37,3 +37,5 @@ platformio run --target upload
 
 # see platformio.ini for settings I like
 ```
+
+TODO: Figure out when sudo is/isn't needed.
