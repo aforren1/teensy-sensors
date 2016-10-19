@@ -20,3 +20,20 @@ Other things:
     - [Audio stimulation](https://github.com/PaulStoffregen/Audio) (though latency is USB/serial latency + audio latency itself, which might still be <5ms)
     - Digital acquisition (knobs, fMRI triggers, ...)
         - Use interrupts for more consistent acquisition? Need to fiddle with priorities then
+
+Platformio setup (Ubuntu at least):
+
+```
+sudo python -c "$(curl -fsSL https://raw.githubusercontent.com/platformio/platformio/master/scripts/get-platformio.py)"
+# (download 99-platformio-udev.rules)
+sudo cp 99-platformio-udev.rules /etc/udev/rules.d/99-platformio-udev.rules
+sudo service udev restart
+
+# in project directory...
+platformio init --board teensy31
+
+# to build & upload,
+platformio run --target upload
+
+# see platformio.ini for settings I like
+```

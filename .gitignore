@@ -2,3 +2,5 @@ benchmarking/*.pyc
 *.db
 */*.db
 sketches/.vscode
+.pioenvs
+.piolibdeps
