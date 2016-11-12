@@ -1,8 +1,8 @@
 #include "ADC.h"
 #include "IntervalTimer.h"
 
-const unsigned int channel_array[2] = {A0, A7};
-const unsigned long period_0 = 100000;
+const unsigned int channel_array[6] = {A0, A1, A2, A3, A4, A7};
+const unsigned long period_0 = 1000;
 const unsigned int array_size = sizeof(channel_array)/sizeof(int);
 elapsedMicros current_time;
 unsigned int ii = 0;
