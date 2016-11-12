@@ -12,9 +12,6 @@
 AudioPlayMemory sound0;
 AudioPlayMemory sound1;
 
-volatile boolean play0 = false;
-volatile boolean play1 = false;
-
 elapsedMicros current_time;
 
 // play to both I2S audio board and on-chip DAC
@@ -26,13 +23,6 @@ AudioConnection c2(sound1, 0, mix1, 1);
 // Create an object to control the audio shield.
 // 
 AudioControlSGTL5000 audioShield;
-
-void callback0() {
-    play0 = true;
-}
-void callback1() {
-    play1 = true;
-}
 
 void setup() {
 
@@ -51,22 +41,15 @@ void setup() {
   attachInterrupt(Pin2, callback1, RISING);
 }
 
-void loop() {
-  noInterrupts();
-  if (play0) {
-    play0 = false;
-    print("Played sound at: ");
-    println(current_time);
+void callback0() {
+    print(current_time);
     sound0.play(AudioSample1);
-  }
-  interrupts();
-
-  noInterrupts();
-  if (play1) {
-    play1 = false;
-    print("Played sound 2 at: ")
-    println(current_time);
-    sound1.play(AudioSample2);
-  }
-  interrupts();
+    println("Sound 1");
 }
+void callback1() {
+    print(current_time);
+    sound1.play(AudioSample2);
+    println("Sound 2");
+}
+
+void loop() {}
