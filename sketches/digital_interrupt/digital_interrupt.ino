@@ -1,5 +1,5 @@
 /* 
-Digital interrupts example?
+Digital interrupts example
 */
 
 #define PinInt 23
